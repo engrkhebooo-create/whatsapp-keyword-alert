@@ -1,6 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.WAKeywordAlert" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/purple_500</item>
+
+    <style name="Theme.WAKeywordAlert" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/tiffany</item>
+        <item name="colorOnPrimary">@color/dark_bg</item>
+        <item name="colorPrimaryContainer">@color/tiffany_deep</item>
+        <item name="colorOnPrimaryContainer">@color/dark_bg</item>
+        <item name="colorSecondary">@color/tiffany_deep</item>
+        <item name="colorOnSecondary">@color/dark_bg</item>
+        <item name="android:colorBackground">@color/dark_bg</item>
+        <item name="colorSurface">@color/card_bg</item>
+        <item name="colorOnSurface">@color/soft_white</item>
+        <item name="colorSurfaceVariant">@color/secondary_dark</item>
+        <item name="colorOnSurfaceVariant">@color/muted_text</item>
+        <item name="colorOutline">@color/secondary_dark</item>
+        <item name="android:windowBackground">@color/dark_bg</item>
+        <item name="android:statusBarColor">@color/dark_bg</item>
+        <item name="android:navigationBarColor">@color/dark_bg</item>
+
+        <item name="materialButtonStyle">@style/PremiumButton</item>
+        <item name="textInputStyle">@style/PremiumTextInput</item>
+        <item name="materialCardViewStyle">@style/PremiumCard</item>
+    </style>
+
+    <!-- زر فاخر بلون Tiffany ونص داكن -->
+    <style name="PremiumButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/tiffany</item>
+        <item name="android:textColor">@color/dark_bg</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="rippleColor">@color/dark_bg</item>
+        <item name="elevation">3dp</item>
+    </style>
+
+    <!-- زر ثانوي مفرّغ بإطار Tiffany -->
+    <style name="PremiumButton.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:textColor">@color/tiffany</item>
+        <item name="strokeColor">@color/tiffany</item>
+        <item name="android:textStyle">bold</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="rippleColor">@color/tiffany</item>
+    </style>
+
+    <!-- حقل إدخال حديث -->
+    <style name="PremiumTextInput" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/tiffany</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="hintTextColor">@color/tiffany</item>
+        <item name="android:textColorHint">@color/muted_text</item>
+        <item name="boxBackgroundColor">@color/secondary_dark</item>
+        <item name="boxCornerRadiusTopStart">14dp</item>
+        <item name="boxCornerRadiusTopEnd">14dp</item>
+        <item name="boxCornerRadiusBottomStart">14dp</item>
+        <item name="boxCornerRadiusBottomEnd">14dp</item>
+    </style>
+
+    <!-- بطاقة فاخرة بحواف دائرية -->
+    <style name="PremiumCard" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/card_bg</item>
+        <item name="cardCornerRadius">22dp</item>
+        <item name="cardElevation">6dp</item>
+        <item name="contentPadding">18dp</item>
+    </style>
+
+    <!-- عنوان قسم بلون Tiffany -->
+    <style name="SectionTitle">
+        <item name="android:textColor">@color/tiffany</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16sp</item>
     </style>
 </resources>

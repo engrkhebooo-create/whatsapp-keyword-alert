@@ -103,7 +103,8 @@ class NotificationListener : NotificationListenerService() {
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val chId = ensureChannel(settings, nm)
         val builder = NotificationCompat.Builder(this, chId)
-            .setSmallIcon(android.R.drawable.ic_dialog_email)
+            .setSmallIcon(R.drawable.ic_stat_alert)
+            .setColor(0xFF58E0DC.toInt())
             .setContentTitle("تطابق: ${item.keywords}")
             .setContentText(item.text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(item.text))

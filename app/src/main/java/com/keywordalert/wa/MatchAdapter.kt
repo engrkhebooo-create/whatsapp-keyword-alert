@@ -22,9 +22,10 @@ class MatchAdapter(private var items: List<MatchItem>) :
 
     override fun onBindViewHolder(holder: VH, position: Int) {
         val item = items[position]
-        holder.binding.tvKeywords.text = "🔑 ${item.keywords}"
+        holder.binding.tvKeywords.text = item.keywords
         holder.binding.tvText.text = item.text
-        holder.binding.tvMeta.text = "${item.app} • ${fmt.format(Date(item.time))}"
+        holder.binding.tvApp.text = item.app
+        holder.binding.tvMeta.text = fmt.format(Date(item.time))
     }
 
     override fun getItemCount(): Int = items.size

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#1B5E20</color>
-    <color name="purple_500">#1B5E20</color>
+    <color name="tiffany">#58E0DC</color>
+    <color name="tiffany_deep">#3CCFC8</color>
+    <color name="dark_bg">#0D0D14</color>
+    <color name="card_bg">#161622</color>
+    <color name="secondary_dark">#202030</color>
+    <color name="soft_white">#F5F7FA</color>
+    <color name="muted_text">#AEB6C2</color>
+    <color name="gold">#D4AF37</color>
+    <color name="danger">#FF6B6B</color>
+
+    <!-- خلفية أيقونة التطبيق -->
+    <color name="ic_launcher_background">#58E0DC</color>
 </resources>

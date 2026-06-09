@@ -143,10 +143,10 @@ class MainActivity : AppCompatActivity() {
         val enabled = isNotificationServiceEnabled()
         if (enabled) {
             binding.tvStatus.text = "✅ صلاحية الإشعارات مفعّلة"
-            binding.tvStatus.setBackgroundColor(0xFF1B5E20.toInt())
+            binding.tvStatus.setTextColor(0xFF58E0DC.toInt())
         } else {
             binding.tvStatus.text = "⚠️ صلاحية الإشعارات غير مفعّلة — اضغط الزر بالأسفل"
-            binding.tvStatus.setBackgroundColor(0xFFB71C1C.toInt())
+            binding.tvStatus.setTextColor(0xFFFF6B6B.toInt())
         }
     }
 
