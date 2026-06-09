@@ -4,8 +4,9 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.media.AudioAttributes
 import android.media.RingtoneManager
-import android.os.Build
+import android.net.Uri
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.service.notification.NotificationListenerService
@@ -23,16 +24,14 @@ class NotificationListener : NotificationListenerService() {
         "com.whatsapp.w4b"     // واتساب للأعمال
     )
 
-    private val alertChannelId = "wa_keyword_alert_channel"
+    private val baseChannelId = "wa_keyword_alert_channel"
+
+    // معرّف القناة الحالي يعتمد على نسخة النغمة (يتغيّر عند تغيير النغمة)
+    private fun channelId(settings: SettingsStore) = baseChannelId + "_v" + settings.channelVersion
 
     // لتجنّب تكرار التنبيه لنفس الإشعار بسرعة
     private var lastKey: String = ""
     private var lastTime: Long = 0
-
-    override fun onCreate() {
-        super.onCreate()
-        createChannel()
-    }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         try {
@@ -57,6 +56,10 @@ class NotificationListener : NotificationListenerService() {
 
             val matched = TextNormalizer.matchedKeywords(combined, keywords)
             if (matched.isEmpty()) return
+
+            // تجاهل الرسالة إذا احتوت إحدى كلمات التجاهل (مثل: معلمة، مدرسة)
+            val excluded = TextNormalizer.matchedKeywords(combined, settings.excludeList())
+            if (excluded.isNotEmpty()) return
 
             // منع التكرار خلال 3 ثوانٍ لنفس النص
             val now = System.currentTimeMillis()
@@ -98,7 +101,8 @@ class NotificationListener : NotificationListenerService() {
         }
 
         val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val builder = NotificationCompat.Builder(this, alertChannelId)
+        val chId = ensureChannel(settings, nm)
+        val builder = NotificationCompat.Builder(this, chId)
             .setSmallIcon(android.R.drawable.ic_dialog_email)
             .setContentTitle("تطابق: ${item.keywords}")
             .setContentText(item.text)
@@ -106,26 +110,46 @@ class NotificationListener : NotificationListenerService() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
 
-        if (settings.soundEnabled) {
-            builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
-        }
-
         nm.notify(item.time.toInt(), builder.build())
     }
 
-    private fun createChannel() {
-        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val existing = nm.getNotificationChannel(alertChannelId)
-        if (existing == null) {
+    /**
+     * ينشئ قناة الإشعار بالنغمة المختارة. بما أن نغمة القناة لا يمكن تغييرها بعد إنشائها،
+     * نستخدم معرّفاً يحمل رقم نسخة يتغيّر عند اختيار نغمة جديدة، ونحذف القنوات القديمة.
+     */
+    private fun ensureChannel(settings: SettingsStore, nm: NotificationManager): String {
+        val chId = channelId(settings)
+        if (nm.getNotificationChannel(chId) == null) {
+            // حذف القنوات القديمة (النسخ السابقة)
+            for (ch in nm.notificationChannels) {
+                if (ch.id.startsWith(baseChannelId) && ch.id != chId) {
+                    nm.deleteNotificationChannel(ch.id)
+                }
+            }
             val channel = NotificationChannel(
-                alertChannelId,
+                chId,
                 "تنبيهات الكلمات المفتاحية",
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "تنبيه عند تطابق كلمة مفتاحية في رسائل واتساب"
-                enableVibration(true)
+                enableVibration(settings.vibrateEnabled)
+                if (settings.soundEnabled) {
+                    val uri: Uri = if (settings.soundUri.isNotEmpty()) {
+                        Uri.parse(settings.soundUri)
+                    } else {
+                        RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+                    }
+                    val attrs = AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION_EVENT)
+                        .build()
+                    setSound(uri, attrs)
+                } else {
+                    setSound(null, null)
+                }
             }
             nm.createNotificationChannel(channel)
         }
+        return chId
     }
 }
